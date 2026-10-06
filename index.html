@@ -57,7 +57,7 @@
     box-shadow: 0 0 5px var(--green);
   }
 
-  /* 部位タブ（高さをアップ） */
+  /* 部位タブ（押しやすい大型サイズ） */
   .category-tabs {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
@@ -80,7 +80,7 @@
     color: #60a5fa;
   }
 
-  /* 種目セレクター（縦幅と押しやすさを拡大） */
+  /* 種目リスト */
   .exercise-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -168,7 +168,7 @@
   }
   .unit { font-size: 13px; color: var(--muted); margin-left: 3px; }
 
-  /* テンキー（縦にしっかり伸ばして親指で押しやすく） */
+  /* テンキー（縦長＆片手親指で押しやすい設計） */
   .numpad {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -198,7 +198,7 @@
   }
   .btn-action:active { background: var(--accent); color: #fff; }
 
-  /* ログパネル */
+  /* ログプレビュー */
   .log-panel {
     background: var(--panel);
     border: 1px solid var(--border);
@@ -212,7 +212,7 @@
     line-height: 1.4;
   }
 
-  /* コピーボタン */
+  /* チャット用一括コピーボタン */
   .copy-btn {
     background: #0f2418;
     border: 1px solid var(--green);
@@ -248,7 +248,7 @@
   <!-- 種目リスト -->
   <div class="exercise-grid" id="exerciseGrid"></div>
 
-  <!-- ディスプレイ部（L/R/両側） -->
+  <!-- ディスプレイ部（L/R/両側セレクター） -->
   <div class="display-container">
     <div class="side-selector">
       <div class="side-btn active-both" id="sideBoth" onclick="setSide('')">BOTH</div>
@@ -264,7 +264,7 @@
     </div>
   </div>
 
-  <!-- テンキー（縦長化・押しやすさ重視） -->
+  <!-- テンキー -->
   <div class="numpad">
     <div class="num-btn" onclick="pressNum('7')">7</div>
     <div class="num-btn" onclick="pressNum('8')">8</div>
@@ -283,11 +283,14 @@
     </div>
   </div>
 
-  <!-- ログパネル＆コピー -->
+  <!-- ログパネル -->
   <div class="log-panel" id="logBox">// READY</div>
-  <div class="copy-btn" onclick="copyTSV()">COPY NOTION TSV</div>
+  
+  <!-- チャット送信用コピーボタン -->
+  <div class="copy-btn" onclick="copyForChat()">COPY FOR CHAT</div>
 
 <script>
+  // Granfit24宝塚店 仕様プリセット
   const PRESETS = {
     '胸': ['PL ワイドチェスト', 'インクラインスミス', 'ダンベルフライ', 'ペックフライ', 'ケーブルクロス', 'ディップス'],
     '肩': ['スミスミリタリー', 'ダンベルサイドレイズ', 'インクラインサイドレイズ', 'ケーブルリアデルト', 'フェイスプル', 'ダンベルショルダー'],
@@ -394,6 +397,7 @@
       records.push({ ex: fullExName, wt: currentWeight, rep: currentReps });
       renderLog();
 
+      // 片側(L)を記録した直後なら、自動で(R)に切り替えて重量を引き継ぐアシスト
       if (currentSide === ' (L)') {
         setSide(' (R)');
         currentWeight = records[records.length - 1].wt;
@@ -413,14 +417,31 @@
     box.innerHTML = records.map((r, i) => `[${i+1}] ${r.ex} : ${r.wt}kg × ${r.rep}rep`).reverse().join('<br>');
   }
 
-  function copyTSV() {
+  // チャット連携用の一括コピー関数
+  function copyForChat() {
     if (records.length === 0) return;
-    const tsv = records.map(r => `${r.ex}\t${r.wt}\t${r.rep}`).join('\n');
-    navigator.clipboard.writeText(tsv).then(() => {
-      alert('NOTION TSV COPIED!');
+    
+    // 種目ごとにセットを集約
+    const summary = {};
+    records.forEach(r => {
+      if (!summary[r.ex]) summary[r.ex] = [];
+      summary[r.ex].push(`${r.wt}kg × ${r.rep}`);
+    });
+
+    const now = new Date();
+    const dateStr = `${now.getMonth() + 1}/${now.getDate()}`;
+    let output = `【WORKOUT LOG: ${dateStr}】\n`;
+    
+    for (const [ex, sets] of Object.entries(summary)) {
+      output += `・${ex}: ${sets.join(', ')}\n`;
+    }
+
+    navigator.clipboard.writeText(output.trim()).then(() => {
+      alert('CHAT LOG COPIED!\nチャットにそのまま貼り付けて送信できます。');
     });
   }
 
+  // 初期実行
   renderExerciseButtons();
   updateHeaderLabel();
 </script>
