@@ -3,142 +3,207 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>WORKOUT TERMINAL</title>
+<title>WORKOUT TERMINAL V2</title>
 <style>
   :root {
-    --bg: #0d0f12;
-    --panel: #161a1f;
-    --border: #232931;
+    --bg: #090b0e;
+    --panel: #13171d;
+    --border: #222933;
     --text: #e1e7ed;
+    --muted: #627282;
     --accent: #ff334b; /* クリムゾンレッド */
     --green: #00e676;
-    --btn-bg: #1c2229;
-    --btn-active: #2b3540;
+    --side-l: #38bdf8;  /* Left: シアン */
+    --side-r: #f59e0b;  /* Right: アンバー */
+    --btn-bg: #181d24;
+    --btn-active: #28313d;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
   body {
     background: var(--bg);
     color: var(--text);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "SF Pro Display", monospace;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
     display: flex;
     flex-direction: column;
     height: 100vh;
-    padding: 12px;
-    gap: 10px;
+    padding: 10px;
+    gap: 8px;
   }
   /* ヘッダー */
   .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 4px 6px;
+    padding: 2px 4px;
     font-size: 11px;
     letter-spacing: 1.5px;
-    color: #6c7987;
+    color: var(--muted);
     border-bottom: 1px solid var(--border);
   }
   .status-dot {
     display: inline-block;
-    width: 7px;
-    height: 7px;
+    width: 6px;
+    height: 6px;
     background: var(--green);
     border-radius: 50%;
-    margin-right: 5px;
+    margin-right: 6px;
     box-shadow: 0 0 6px var(--green);
   }
-  /* 銘柄セレクター */
-  .tag-grid {
+
+  /* 部位セレクター（タブ） */
+  .category-tabs {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 6px;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 4px;
   }
-  .tag-btn {
+  .cat-btn {
     background: var(--panel);
     border: 1px solid var(--border);
-    color: #8b98a5;
-    padding: 8px 4px;
-    border-radius: 6px;
+    color: var(--muted);
+    padding: 6px 0;
+    border-radius: 5px;
     font-size: 11px;
-    font-weight: 600;
+    font-weight: 700;
     text-align: center;
   }
-  .tag-btn.active {
-    background: #221217;
+  .cat-btn.active {
+    background: #1e2633;
+    border-color: #3b82f6;
+    color: #60a5fa;
+  }
+
+  /* 種目セレクター（スクロール対応） */
+  .exercise-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 5px;
+    max-height: 86px;
+    overflow-y: auto;
+  }
+  .ex-btn {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: #94a3b8;
+    padding: 7px 6px;
+    border-radius: 5px;
+    font-size: 11px;
+    font-weight: 600;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .ex-btn.active {
+    background: #231216;
     border-color: var(--accent);
     color: #ff6b7d;
-    box-shadow: 0 0 8px rgba(255, 51, 75, 0.2);
   }
-  /* ターミナル入力・表示ディスプレイ */
+
+  /* ディスプレイ＆サイドセレクター */
+  .display-container {
+    display: flex;
+    gap: 6px;
+  }
+  .side-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 52px;
+  }
+  .side-btn {
+    flex: 1;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    border-radius: 5px;
+    font-size: 11px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .side-btn.active-both { background: #1e2633; border-color: #475569; color: #fff; }
+  .side-btn.active-l { background: #0c2333; border-color: var(--side-l); color: var(--side-l); }
+  .side-btn.active-r { background: #2b1d0c; border-color: var(--side-r); color: var(--side-r); }
+
   .display-box {
+    flex: 1;
     background: #000;
     border: 1px solid var(--border);
     border-radius: 8px;
-    padding: 10px 14px;
+    padding: 8px 12px;
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
+    align-items: center;
   }
   .input-target {
-    font-size: 13px;
-    color: #6c7987;
+    font-size: 10px;
     letter-spacing: 1px;
+    color: var(--muted);
+  }
+  .ex-display-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: #ff6b7d;
+    margin-top: 2px;
   }
   .input-value {
-    font-size: 26px;
+    font-size: 28px;
     font-weight: 700;
     color: #fff;
     font-family: monospace;
   }
-  .unit { font-size: 14px; color: #6c7987; margin-left: 2px; }
-  /* テンキーグリッド */
+  .unit { font-size: 13px; color: var(--muted); margin-left: 2px; }
+
+  /* テンキー */
   .numpad {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
+    gap: 6px;
     flex-grow: 1;
   }
   .num-btn {
     background: var(--btn-bg);
     border: 1px solid var(--border);
     color: #fff;
-    font-size: 20px;
+    font-size: 19px;
     font-weight: 600;
-    border-radius: 8px;
+    border-radius: 7px;
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: background 0.05s;
   }
-  .num-btn:active { background: var(--btn-active); border-color: #4f5d6b; }
+  .num-btn:active { background: var(--btn-active); }
   .btn-action {
     background: #2a1116;
     border-color: var(--accent);
     color: var(--accent);
-    font-size: 14px;
-    font-weight: 700;
+    font-size: 13px;
+    font-weight: 800;
     letter-spacing: 1px;
   }
   .btn-action:active { background: var(--accent); color: #fff; }
-  /* ログプレビュー＆コピー */
+
+  /* ログ＆コピー */
   .log-panel {
     background: var(--panel);
     border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 8px 12px;
-    height: 80px;
+    border-radius: 6px;
+    padding: 6px 10px;
+    height: 72px;
     overflow-y: auto;
     font-family: monospace;
-    font-size: 11px;
-    color: #a4b1be;
-    line-height: 1.5;
+    font-size: 10.5px;
+    color: #94a3b8;
+    line-height: 1.4;
   }
   .copy-btn {
-    background: #112419;
+    background: #0f2418;
     border: 1px solid var(--green);
     color: var(--green);
-    padding: 10px;
+    padding: 8px;
     border-radius: 6px;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 700;
     letter-spacing: 1.5px;
     text-align: center;
@@ -149,27 +214,37 @@
 <body>
 
   <div class="header">
-    <div><span class="status-dot"></span>PORTFOLIO LOG</div>
+    <div><span class="status-dot"></span>GRANFIT24 TERMINAL</div>
     <div id="clock">00:00</div>
   </div>
 
-  <!-- 主要銘柄 -->
-  <div class="tag-grid" id="exerciseGrid">
-    <div class="tag-btn active" onclick="setEx('PL チェスト')">PLチェスト</div>
-    <div class="tag-btn" onclick="setEx('スミスミリタリー')">スミス肩</div>
-    <div class="tag-btn" onclick="setEx('プレスダウン')">三頭プレス</div>
-    <div class="tag-btn" onclick="setEx('PL ワイドプル')">PLプル</div>
-    <div class="tag-btn" onclick="setEx('ベントオーバー')">ベントロウ</div>
-    <div class="tag-btn" onclick="setEx('PL レッグプレス')">レッグプレス</div>
+  <!-- 部位セレクター -->
+  <div class="category-tabs" id="catTabs">
+    <div class="cat-btn active" onclick="selectCat('胸')">胸</div>
+    <div class="cat-btn" onclick="selectCat('肩')">肩</div>
+    <div class="cat-btn" onclick="selectCat('背中')">背中</div>
+    <div class="cat-btn" onclick="selectCat('三頭')">三頭</div>
+    <div class="cat-btn" onclick="selectCat('二頭')">二頭</div>
+    <div class="cat-btn" onclick="selectCat('脚')">脚</div>
   </div>
 
-  <!-- ディスプレイ -->
-  <div class="display-box">
-    <div>
-      <div class="input-target" id="stepLabel">STEP 1: WEIGHT</div>
-      <div style="font-size:12px; color:#ff6b7d;" id="currentExLabel">PL チェスト</div>
+  <!-- 種目リスト -->
+  <div class="exercise-grid" id="exerciseGrid"></div>
+
+  <!-- ディスプレイ部（L/R/両側セレクター付き） -->
+  <div class="display-container">
+    <div class="side-selector">
+      <div class="side-btn active-both" id="sideBoth" onclick="setSide('')">BOTH</div>
+      <div class="side-btn" id="sideL" onclick="setSide(' (L)')">L</div>
+      <div class="side-btn" id="sideR" onclick="setSide(' (R)')">R</div>
     </div>
-    <div class="input-value"><span id="valDisplay">--</span><span class="unit" id="unitDisplay">kg</span></div>
+    <div class="display-box">
+      <div>
+        <div class="input-target" id="stepLabel">STEP 1: WEIGHT</div>
+        <div class="ex-display-name" id="currentExLabel">PL ワイドチェスト</div>
+      </div>
+      <div class="input-value"><span id="valDisplay">--</span><span class="unit" id="unitDisplay">kg</span></div>
+    </div>
   </div>
 
   <!-- テンキー -->
@@ -186,95 +261,4 @@
     <div class="num-btn" onclick="pressNum('.')">.</div>
     <div class="num-btn" onclick="pressNum('0')">0</div>
     <div class="num-btn" onclick="clearVal()">CLR</div>
-    <div class="num-btn btn-action" style="grid-column: span 3; height: 46px;" onclick="confirmStep()" id="execBtn">
-      NEXT: REPS →
-    </div>
-  </div>
-
-  <!-- ログ -->
-  <div class="log-panel" id="logBox">// EXECUTION LOGS...</div>
-  <div class="copy-btn" onclick="copyTSV()">COPY NOTION TSV</div>
-
-<script>
-  let currentEx = 'PL チェスト';
-  let step = 1; // 1: weight, 2: reps
-  let currentWeight = '';
-  let currentReps = '';
-  let records = [];
-
-  function updateClock() {
-    const now = new Date();
-    document.getElementById('clock').innerText = now.toTimeString().split(' ')[0].substring(0,5);
-  }
-  setInterval(updateClock, 1000); updateClock();
-
-  function setEx(name) {
-    currentEx = name;
-    document.querySelectorAll('.tag-btn').forEach(b => {
-      b.classList.toggle('active', b.innerText.includes(name.substring(0,3)));
-    });
-    document.getElementById('currentExLabel').innerText = name;
-    resetInput();
-  }
-
-  function pressNum(n) {
-    const disp = document.getElementById('valDisplay');
-    if (step === 1) {
-      if (n === '.' && currentWeight.includes('.')) return;
-      currentWeight += n;
-      disp.innerText = currentWeight;
-    } else {
-      if (n === '.') return;
-      currentReps += n;
-      disp.innerText = currentReps;
-    }
-  }
-
-  function clearVal() {
-    if (step === 1) currentWeight = '';
-    else currentReps = '';
-    document.getElementById('valDisplay').innerText = '--';
-  }
-
-  function resetInput() {
-    step = 1;
-    currentWeight = '';
-    currentReps = '';
-    document.getElementById('stepLabel').innerText = 'STEP 1: WEIGHT';
-    document.getElementById('unitDisplay').innerText = 'kg';
-    document.getElementById('valDisplay').innerText = '--';
-    document.getElementById('execBtn').innerText = 'NEXT: REPS →';
-  }
-
-  function confirmStep() {
-    if (step === 1) {
-      if (!currentWeight) return;
-      step = 2;
-      document.getElementById('stepLabel').innerText = 'STEP 2: REPS';
-      document.getElementById('unitDisplay').innerText = 'rep';
-      document.getElementById('valDisplay').innerText = '--';
-      document.getElementById('execBtn').innerText = 'EXECUTE [約定]';
-    } else {
-      if (!currentReps) return;
-      const rec = { ex: currentEx, wt: currentWeight, rep: currentReps };
-      records.push(rec);
-      renderLog();
-      resetInput();
-    }
-  }
-
-  function renderLog() {
-    const box = document.getElementById('logBox');
-    box.innerHTML = records.map((r, i) => `[${i+1}] ${r.ex} : ${r.wt}kg × ${r.rep}rep`).reverse().join('<br>');
-  }
-
-  function copyTSV() {
-    if (records.length === 0) return;
-    const tsv = records.map(r => `${r.ex}\t${r.wt}\t${r.rep}`).join('\n');
-    navigator.clipboard.writeText(tsv).then(() => {
-      alert('NOTION TSV COPIED!');
-    });
-  }
-</script>
-</body>
-</html>
+    <div class="num-btn btn-
