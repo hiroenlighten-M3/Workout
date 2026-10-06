@@ -2,23 +2,23 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>WORKOUT TERMINAL V2</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>WORKOUT TERMINAL</title>
 <style>
   :root {
     --bg: #090b0e;
     --panel: #13171d;
     --border: #222933;
     --text: #e1e7ed;
-    --muted: #627282;
-    --accent: #ff334b; /* クリムゾンレッド */
+    --muted: #64748b;
+    --accent: #ff334b;
     --green: #00e676;
-    --side-l: #38bdf8;  /* Left: シアン */
-    --side-r: #f59e0b;  /* Right: アンバー */
+    --side-l: #38bdf8;
+    --side-r: #f59e0b;
     --btn-bg: #181d24;
     --btn-active: #28313d;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-tap-highlight-color: transparent; }
   body {
     background: var(--bg);
     color: var(--text);
@@ -26,17 +26,16 @@
     display: flex;
     flex-direction: column;
     height: 100vh;
-    padding: 10px;
-    gap: 8px;
+    padding: 8px;
+    gap: 6px;
   }
-  /* ヘッダー */
   .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 2px 4px;
     font-size: 11px;
-    letter-spacing: 1.5px;
+    letter-spacing: 1px;
     color: var(--muted);
     border-bottom: 1px solid var(--border);
   }
@@ -46,11 +45,11 @@
     height: 6px;
     background: var(--green);
     border-radius: 50%;
-    margin-right: 6px;
-    box-shadow: 0 0 6px var(--green);
+    margin-right: 5px;
+    box-shadow: 0 0 5px var(--green);
   }
 
-  /* 部位セレクター（タブ） */
+  /* 部位タブ */
   .category-tabs {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
@@ -61,10 +60,11 @@
     border: 1px solid var(--border);
     color: var(--muted);
     padding: 6px 0;
-    border-radius: 5px;
+    border-radius: 4px;
     font-size: 11px;
     font-weight: 700;
     text-align: center;
+    cursor: pointer;
   }
   .cat-btn.active {
     background: #1e2633;
@@ -72,26 +72,27 @@
     color: #60a5fa;
   }
 
-  /* 種目セレクター（スクロール対応） */
+  /* 種目セレクター */
   .exercise-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 5px;
-    max-height: 86px;
+    gap: 4px;
+    max-height: 84px;
     overflow-y: auto;
   }
   .ex-btn {
     background: var(--panel);
     border: 1px solid var(--border);
     color: #94a3b8;
-    padding: 7px 6px;
-    border-radius: 5px;
+    padding: 6px 8px;
+    border-radius: 4px;
     font-size: 11px;
     font-weight: 600;
     text-align: left;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    cursor: pointer;
   }
   .ex-btn.active {
     background: #231216;
@@ -99,7 +100,7 @@
     color: #ff6b7d;
   }
 
-  /* ディスプレイ＆サイドセレクター */
+  /* ディスプレイ部 */
   .display-container {
     display: flex;
     gap: 6px;
@@ -107,20 +108,21 @@
   .side-selector {
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    width: 52px;
+    gap: 3px;
+    width: 50px;
   }
   .side-btn {
     flex: 1;
     background: var(--panel);
     border: 1px solid var(--border);
     color: var(--muted);
-    border-radius: 5px;
-    font-size: 11px;
+    border-radius: 4px;
+    font-size: 10px;
     font-weight: 800;
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
   }
   .side-btn.active-both { background: #1e2633; border-color: #475569; color: #fff; }
   .side-btn.active-l { background: #0c2333; border-color: var(--side-l); color: var(--side-l); }
@@ -130,67 +132,73 @@
     flex: 1;
     background: #000;
     border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 8px 12px;
+    border-radius: 6px;
+    padding: 6px 12px;
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
   .input-target {
     font-size: 10px;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
     color: var(--muted);
   }
   .ex-display-name {
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 700;
     color: #ff6b7d;
-    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 140px;
   }
   .input-value {
-    font-size: 28px;
+    font-size: 22px;
     font-weight: 700;
     color: #fff;
     font-family: monospace;
   }
-  .unit { font-size: 13px; color: var(--muted); margin-left: 2px; }
+  .unit { font-size: 12px; color: var(--muted); margin-left: 2px; }
 
-  /* テンキー */
+  /* テンキー（サイズを適正化） */
   .numpad {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 6px;
-    flex-grow: 1;
+    grid-template-rows: repeat(4, 38px) 36px;
+    gap: 5px;
   }
   .num-btn {
     background: var(--btn-bg);
     border: 1px solid var(--border);
     color: #fff;
-    font-size: 19px;
+    font-size: 16px;
     font-weight: 600;
-    border-radius: 7px;
+    border-radius: 6px;
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
   }
   .num-btn:active { background: var(--btn-active); }
   .btn-action {
     background: #2a1116;
     border-color: var(--accent);
     color: var(--accent);
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 800;
     letter-spacing: 1px;
   }
   .btn-action:active { background: var(--accent); color: #fff; }
 
-  /* ログ＆コピー */
+  /* ログパネル */
   .log-panel {
     background: var(--panel);
     border: 1px solid var(--border);
     border-radius: 6px;
     padding: 6px 10px;
-    height: 72px;
+    flex-grow: 1;
+    min-height: 50px;
+    max-height: 80px;
     overflow-y: auto;
     font-family: monospace;
     font-size: 10.5px;
@@ -205,8 +213,9 @@
     border-radius: 6px;
     font-size: 11px;
     font-weight: 700;
-    letter-spacing: 1.5px;
+    letter-spacing: 1px;
     text-align: center;
+    cursor: pointer;
   }
   .copy-btn:active { background: var(--green); color: #000; }
 </style>
@@ -218,20 +227,20 @@
     <div id="clock">00:00</div>
   </div>
 
-  <!-- 部位セレクター -->
-  <div class="category-tabs" id="catTabs">
-    <div class="cat-btn active" onclick="selectCat('胸')">胸</div>
-    <div class="cat-btn" onclick="selectCat('肩')">肩</div>
-    <div class="cat-btn" onclick="selectCat('背中')">背中</div>
-    <div class="cat-btn" onclick="selectCat('三頭')">三頭</div>
-    <div class="cat-btn" onclick="selectCat('二頭')">二頭</div>
-    <div class="cat-btn" onclick="selectCat('脚')">脚</div>
+  <!-- 部位タブ -->
+  <div class="category-tabs">
+    <div class="cat-btn active" onclick="switchCategory('胸')">胸</div>
+    <div class="cat-btn" onclick="switchCategory('肩')">肩</div>
+    <div class="cat-btn" onclick="switchCategory('背中')">背中</div>
+    <div class="cat-btn" onclick="switchCategory('三頭')">三頭</div>
+    <div class="cat-btn" onclick="switchCategory('二頭')">二頭</div>
+    <div class="cat-btn" onclick="switchCategory('脚')">脚</div>
   </div>
 
   <!-- 種目リスト -->
   <div class="exercise-grid" id="exerciseGrid"></div>
 
-  <!-- ディスプレイ部（L/R/両側セレクター付き） -->
+  <!-- ディスプレイ部（L/R/両側） -->
   <div class="display-container">
     <div class="side-selector">
       <div class="side-btn active-both" id="sideBoth" onclick="setSide('')">BOTH</div>
@@ -261,4 +270,152 @@
     <div class="num-btn" onclick="pressNum('.')">.</div>
     <div class="num-btn" onclick="pressNum('0')">0</div>
     <div class="num-btn" onclick="clearVal()">CLR</div>
-    <div class="num-btn btn-
+    <div class="num-btn btn-action" style="grid-column: span 3;" onclick="confirmStep()" id="execBtn">
+      NEXT: REPS →
+    </div>
+  </div>
+
+  <!-- ログパネル＆コピー -->
+  <div class="log-panel" id="logBox">// READY</div>
+  <div class="copy-btn" onclick="copyTSV()">COPY NOTION TSV</div>
+
+<script>
+  const PRESETS = {
+    '胸': ['PL ワイドチェスト', 'インクラインスミス', 'ダンベルフライ', 'ペックフライ', 'ケーブルクロス', 'ディップス'],
+    '肩': ['スミスミリタリー', 'ダンベルサイドレイズ', 'インクラインサイドレイズ', 'ケーブルリアデルト', 'フェイスプル', 'ダンベルショルダー'],
+    '背中': ['PL ワイドプルダウン', 'ラットプルダウン', 'ベントオーバーロウ', 'ローロウ', 'シーテッドケーブルロウ', 'ワンハンドロウ'],
+    '三頭': ['パラレルグリップPD', 'ローププレスダウン', 'ライイングエクステ', 'EZバーエクステ', 'キックバック'],
+    '二頭': ['インクラインDBカール', 'EZバーカール', 'ケーブルカール', 'ハンマーカール', 'コンセントレーション'],
+    '脚': ['PL レッグプレス', 'レッグエクステ', 'シーテッドレッグカール', 'ライイングレッグカール', 'ブルガリアンSQ', 'カーフレイズ']
+  };
+
+  let currentCategory = '胸';
+  let currentExercise = PRESETS['胸'][0];
+  let currentSide = '';
+  let step = 1;
+  let currentWeight = '';
+  let currentReps = '';
+  let records = [];
+
+  function updateClock() {
+    const now = new Date();
+    document.getElementById('clock').innerText = now.toTimeString().substring(0, 5);
+  }
+  setInterval(updateClock, 1000);
+  updateClock();
+
+  function switchCategory(cat) {
+    currentCategory = cat;
+    document.querySelectorAll('.cat-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.innerText === cat);
+    });
+    renderExerciseButtons();
+    selectExercise(PRESETS[cat][0]);
+  }
+
+  function renderExerciseButtons() {
+    const grid = document.getElementById('exerciseGrid');
+    const items = PRESETS[currentCategory] || [];
+    grid.innerHTML = items.map(name => {
+      const activeClass = name === currentExercise ? 'active' : '';
+      return `<div class="ex-btn ${activeClass}" onclick="selectExercise('${name}')">${name}</div>`;
+    }).join('');
+  }
+
+  function selectExercise(name) {
+    currentExercise = name;
+    document.querySelectorAll('.ex-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.innerText === name);
+    });
+    updateHeaderLabel();
+    resetInput();
+  }
+
+  function setSide(side) {
+    currentSide = side;
+    document.getElementById('sideBoth').className = 'side-btn' + (side === '' ? ' active-both' : '');
+    document.getElementById('sideL').className = 'side-btn' + (side === ' (L)' ? ' active-l' : '');
+    document.getElementById('sideR').className = 'side-btn' + (side === ' (R)' ? ' active-r' : '');
+    updateHeaderLabel();
+  }
+
+  function updateHeaderLabel() {
+    document.getElementById('currentExLabel').innerText = currentExercise + currentSide;
+  }
+
+  function pressNum(n) {
+    const disp = document.getElementById('valDisplay');
+    if (step === 1) {
+      if (n === '.' && currentWeight.includes('.')) return;
+      currentWeight += n;
+      disp.innerText = currentWeight;
+    } else {
+      if (n === '.') return;
+      currentReps += n;
+      disp.innerText = currentReps;
+    }
+  }
+
+  function clearVal() {
+    if (step === 1) currentWeight = '';
+    else currentReps = '';
+    document.getElementById('valDisplay').innerText = '--';
+  }
+
+  function resetInput() {
+    step = 1;
+    currentWeight = '';
+    currentReps = '';
+    document.getElementById('stepLabel').innerText = 'STEP 1: WEIGHT';
+    document.getElementById('unitDisplay').innerText = 'kg';
+    document.getElementById('valDisplay').innerText = '--';
+    document.getElementById('execBtn').innerText = 'NEXT: REPS →';
+  }
+
+  function confirmStep() {
+    if (step === 1) {
+      if (!currentWeight) return;
+      step = 2;
+      document.getElementById('stepLabel').innerText = 'STEP 2: REPS';
+      document.getElementById('unitDisplay').innerText = 'rep';
+      document.getElementById('valDisplay').innerText = '--';
+      document.getElementById('execBtn').innerText = 'EXECUTE [約定]';
+    } else {
+      if (!currentReps) return;
+      const fullExName = currentExercise + currentSide;
+      records.push({ ex: fullExName, wt: currentWeight, rep: currentReps });
+      renderLog();
+
+      if (currentSide === ' (L)') {
+        setSide(' (R)');
+        currentWeight = records[records.length - 1].wt;
+        step = 2;
+        document.getElementById('stepLabel').innerText = 'STEP 2: REPS';
+        document.getElementById('unitDisplay').innerText = 'rep';
+        document.getElementById('valDisplay').innerText = '--';
+        document.getElementById('execBtn').innerText = 'EXECUTE [約定]';
+      } else {
+        resetInput();
+      }
+    }
+  }
+
+  function renderLog() {
+    const box = document.getElementById('logBox');
+    box.innerHTML = records.map((r, i) => `[${i+1}] ${r.ex} : ${r.wt}kg × ${r.rep}rep`).reverse().join('<br>');
+  }
+
+  function copyTSV() {
+    if (records.length === 0) return;
+    const tsv = records.map(r => `${r.ex}\t${r.wt}\t${r.rep}`).join('\n');
+    navigator.clipboard.writeText(tsv).then(() => {
+      alert('NOTION TSV COPIED!');
+    });
+  }
+
+  // 初期実行
+  renderExerciseButtons();
+  updateHeaderLabel();
+</script>
+</body>
+</html>
