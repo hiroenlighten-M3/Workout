@@ -31,8 +31,8 @@
   body {
     display: flex;
     flex-direction: column;
-    padding: 10px 12px;
-    gap: 8px;
+    padding: 8px 10px;
+    gap: 6px;
     justify-content: space-between;
   }
 
@@ -57,18 +57,18 @@
     box-shadow: 0 0 5px var(--green);
   }
 
-  /* 部位タブ（押しやすい大型サイズ） */
+  /* 部位メインタブ（第1階層） */
   .category-tabs {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    gap: 5px;
+    gap: 4px;
   }
   .cat-btn {
     background: var(--panel);
     border: 1px solid var(--border);
     color: var(--muted);
-    padding: 10px 0;
-    border-radius: 6px;
+    padding: 8px 0;
+    border-radius: 5px;
     font-size: 12px;
     font-weight: 700;
     text-align: center;
@@ -80,21 +80,47 @@
     color: #60a5fa;
   }
 
-  /* 種目リスト */
+  /* 解剖学的サブカテゴリ・チップ（第2階層） */
+  .subcat-bar {
+    display: flex;
+    gap: 5px;
+    overflow-x: auto;
+    padding-bottom: 2px;
+  }
+  .subcat-btn {
+    background: #10141a;
+    border: 1px solid var(--border);
+    color: #818cf8;
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .subcat-btn.active {
+    background: #1e1b4b;
+    border-color: #6366f1;
+    color: #c7d2fe;
+    box-shadow: 0 0 6px rgba(99, 102, 241, 0.3);
+  }
+
+  /* 種目リスト（第3階層：常に3〜5個で整理） */
   .exercise-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 6px;
-    max-height: 96px;
+    gap: 5px;
+    min-height: 72px;
+    max-height: 82px;
     overflow-y: auto;
   }
   .ex-btn {
     background: var(--panel);
     border: 1px solid var(--border);
     color: #94a3b8;
-    padding: 9px 8px;
-    border-radius: 6px;
-    font-size: 12px;
+    padding: 7px 8px;
+    border-radius: 5px;
+    font-size: 11.5px;
     font-weight: 600;
     text-align: left;
     white-space: nowrap;
@@ -111,21 +137,21 @@
   /* ディスプレイ部 */
   .display-container {
     display: flex;
-    gap: 8px;
+    gap: 6px;
   }
   .side-selector {
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    width: 58px;
+    gap: 3px;
+    width: 56px;
   }
   .side-btn {
     flex: 1;
     background: var(--panel);
     border: 1px solid var(--border);
     color: var(--muted);
-    border-radius: 6px;
-    font-size: 11px;
+    border-radius: 5px;
+    font-size: 10.5px;
     font-weight: 800;
     display: flex;
     align-items: center;
@@ -140,19 +166,19 @@
     flex: 1;
     background: #000;
     border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 8px 14px;
+    border-radius: 6px;
+    padding: 6px 12px;
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
   .input-target {
-    font-size: 10px;
+    font-size: 9.5px;
     letter-spacing: 0.5px;
     color: var(--muted);
   }
   .ex-display-name {
-    font-size: 13px;
+    font-size: 12.5px;
     font-weight: 700;
     color: #ff6b7d;
     white-space: nowrap;
@@ -161,27 +187,27 @@
     max-width: 160px;
   }
   .input-value {
-    font-size: 26px;
+    font-size: 24px;
     font-weight: 700;
     color: #fff;
     font-family: monospace;
   }
-  .unit { font-size: 13px; color: var(--muted); margin-left: 3px; }
+  .unit { font-size: 12px; color: var(--muted); margin-left: 2px; }
 
-  /* テンキー（縦長＆片手親指で押しやすい設計） */
+  /* テンキー */
   .numpad {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(4, 52px) 46px;
-    gap: 6px;
+    grid-template-rows: repeat(4, 50px) 44px;
+    gap: 5px;
   }
   .num-btn {
     background: var(--btn-bg);
     border: 1px solid var(--border);
     color: #fff;
-    font-size: 21px;
+    font-size: 20px;
     font-weight: 600;
-    border-radius: 8px;
+    border-radius: 7px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -203,25 +229,25 @@
     background: var(--panel);
     border: 1px solid var(--border);
     border-radius: 6px;
-    padding: 6px 10px;
-    height: 52px;
+    padding: 5px 8px;
+    height: 48px;
     overflow-y: auto;
     font-family: monospace;
-    font-size: 10.5px;
+    font-size: 10px;
     color: #94a3b8;
-    line-height: 1.4;
+    line-height: 1.35;
   }
 
-  /* チャット用一括コピーボタン */
+  /* コピーボタン */
   .copy-btn {
     background: #0f2418;
     border: 1px solid var(--green);
     color: var(--green);
-    padding: 12px;
-    border-radius: 7px;
-    font-size: 12px;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 11.5px;
     font-weight: 700;
-    letter-spacing: 1.5px;
+    letter-spacing: 1px;
     text-align: center;
     cursor: pointer;
   }
@@ -231,24 +257,27 @@
 <body>
 
   <div class="header">
-    <div><span class="status-dot"></span>GRANFIT24 TERMINAL</div>
+    <div><span class="status-dot"></span>GRANFIT24 TERMINAL V3</div>
     <div id="clock">00:00</div>
   </div>
 
-  <!-- 部位タブ -->
+  <!-- 第1階層：部位タブ -->
   <div class="category-tabs">
-    <div class="cat-btn active" onclick="switchCategory('胸')">胸</div>
-    <div class="cat-btn" onclick="switchCategory('肩')">肩</div>
-    <div class="cat-btn" onclick="switchCategory('背中')">背中</div>
-    <div class="cat-btn" onclick="switchCategory('三頭')">三頭</div>
-    <div class="cat-btn" onclick="switchCategory('二頭')">二頭</div>
-    <div class="cat-btn" onclick="switchCategory('脚')">脚</div>
+    <div class="cat-btn active" onclick="switchMainCat('胸')">胸</div>
+    <div class="cat-btn" onclick="switchMainCat('肩')">肩</div>
+    <div class="cat-btn" onclick="switchMainCat('背中')">背中</div>
+    <div class="cat-btn" onclick="switchMainCat('三頭')">三頭</div>
+    <div class="cat-btn" onclick="switchMainCat('二頭')">二頭</div>
+    <div class="cat-btn" onclick="switchMainCat('脚')">脚</div>
   </div>
 
-  <!-- 種目リスト -->
+  <!-- 第2階層：解剖学的サブカテゴリ・チップ -->
+  <div class="subcat-bar" id="subcatBar"></div>
+
+  <!-- 第3階層：種目リスト -->
   <div class="exercise-grid" id="exerciseGrid"></div>
 
-  <!-- ディスプレイ部（L/R/両側セレクター） -->
+  <!-- ディスプレイ部（L/R/両側） -->
   <div class="display-container">
     <div class="side-selector">
       <div class="side-btn active-both" id="sideBoth" onclick="setSide('')">BOTH</div>
@@ -258,7 +287,7 @@
     <div class="display-box">
       <div>
         <div class="input-target" id="stepLabel">STEP 1: WEIGHT</div>
-        <div class="ex-display-name" id="currentExLabel">PL ワイドチェスト</div>
+        <div class="ex-display-name" id="currentExLabel">--</div>
       </div>
       <div class="input-value"><span id="valDisplay">--</span><span class="unit" id="unitDisplay">kg</span></div>
     </div>
@@ -290,18 +319,39 @@
   <div class="copy-btn" onclick="copyForChat()">COPY FOR CHAT</div>
 
 <script>
-  // Granfit24宝塚店 仕様プリセット
-  const PRESETS = {
-    '胸': ['PL ワイドチェスト', 'インクラインスミス', 'ダンベルフライ', 'ペックフライ', 'ケーブルクロス', 'ディップス'],
-    '肩': ['スミスミリタリー', 'ダンベルサイドレイズ', 'インクラインサイドレイズ', 'ケーブルリアデルト', 'フェイスプル', 'ダンベルショルダー'],
-    '背中': ['PL ワイドプルダウン', 'ラットプルダウン', 'ベントオーバーロウ', 'ローロウ', 'シーテッドケーブルロウ', 'ワンハンドロウ'],
-    '三頭': ['パラレルグリップPD', 'ローププレスダウン', 'ライイングエクステ', 'EZバーエクステ', 'キックバック'],
-    '二頭': ['インクラインDBカール', 'EZバーカール', 'ケーブルカール', 'ハンマーカール', 'コンセントレーション'],
-    '脚': ['PL レッグプレス', 'レッグエクステ', 'シーテッドレッグカール', 'ライイングレッグカール', 'ブルガリアンSQ', 'カーフレイズ']
+  // 解剖学的マスターデータ
+  const DB = {
+    '胸': {
+      '上部 (インクライン)': ['PL インクライン', 'インクラインスミス', 'インクラインDBプレス', 'インクラインDBフライ', 'ロープーリークロス'],
+      '中部 (フラット)': ['PL ワイドチェスト', 'フラットDBプレス', 'フラットDBフライ', 'ペックフライ', 'スミスフラット'],
+      '下部 (デクライン)': ['PL デクライン', 'ディップス (胸)', 'ハイプーリークロス']
+    },
+    '肩': {
+      '前部 (フロント)': ['スミスミリタリー', 'ダンベルショルダー', 'スミスインクラインF', 'ケーブルフロントレイズ'],
+      '中部 (サイド)': ['ダンベルサイドレイズ', 'インクラインサイドレイズ', 'ケーブルサイドレイズ'],
+      '後部 (リア)': ['ケーブルリアデルト', 'ダンベルリアデルト', 'ペックリア', 'フェイスプル']
+    },
+    '背中': {
+      '上部/外側 (垂直引き)': ['PL ワイドプルダウン', 'ラットプルダウン', 'PL ハイロウ (DY)', 'アシストプルアップ'],
+      '中下部/内側 (水平引き)': ['ベントオーバーロウ', 'Tバーロウ', 'ローロウ', 'シーテッドケーブルロウ', 'ダンベルワンハンドロウ']
+    },
+    '三頭': {
+      '長頭 (ストレッチ)': ['ライイングエクステ', 'EZバーエクステ', 'オーバーヘッドケーブル'],
+      '外側・内側 (プレス)': ['パラレルグリップPD', 'ローププレスダウン', 'ディップス (三頭)', 'キックバック']
+    },
+    '二頭': {
+      '長頭・短頭': ['インクラインDBカール', 'EZバーカール', 'ケーブルカール', 'コンセントレーション'],
+      '上腕筋・腕橈骨筋': ['ハンマーカール', 'リバースカール']
+    },
+    '脚': {
+      '大腿四頭筋 (前)': ['PL レッグプレス', 'レッグエクステ', 'ハックスクワット', 'ブルガリアンSQ'],
+      'ハム・臀部 (後)': ['シーテッドレッグカール', 'ライイングレッグカール', 'ルーマニアンDL', 'カーフレイズ']
+    }
   };
 
-  let currentCategory = '胸';
-  let currentExercise = PRESETS['胸'][0];
+  let currentMain = '胸';
+  let currentSub = Object.keys(DB['胸'])[0];
+  let currentExercise = DB['胸'][currentSub][0];
   let currentSide = '';
   let step = 1;
   let currentWeight = '';
@@ -315,22 +365,45 @@
   setInterval(updateClock, 1000);
   updateClock();
 
-  function switchCategory(cat) {
-    currentCategory = cat;
+  function switchMainCat(cat) {
+    currentMain = cat;
     document.querySelectorAll('.cat-btn').forEach(btn => {
       btn.classList.toggle('active', btn.innerText === cat);
     });
-    renderExerciseButtons();
-    selectExercise(PRESETS[cat][0]);
+    renderSubCats();
   }
 
-  function renderExerciseButtons() {
+  function renderSubCats() {
+    const subBar = document.getElementById('subcatBar');
+    const subs = Object.keys(DB[currentMain]);
+    currentSub = subs[0];
+    
+    subBar.innerHTML = subs.map((sub, i) => 
+      `<div class="subcat-btn ${i === 0 ? 'active' : ''}" onclick="switchSubCat('${sub}')">${sub}</div>`
+    ).join('');
+    
+    renderExercises();
+  }
+
+  function switchSubCat(sub) {
+    currentSub = sub;
+    document.querySelectorAll('.subcat-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.innerText === sub);
+    });
+    renderExercises();
+  }
+
+  function renderExercises() {
     const grid = document.getElementById('exerciseGrid');
-    const items = PRESETS[currentCategory] || [];
-    grid.innerHTML = items.map(name => {
-      const activeClass = name === currentExercise ? 'active' : '';
-      return `<div class="ex-btn ${activeClass}" onclick="selectExercise('${name}')">${name}</div>`;
-    }).join('');
+    const items = DB[currentMain][currentSub] || [];
+    currentExercise = items[0];
+    
+    grid.innerHTML = items.map((name, i) => 
+      `<div class="ex-btn ${i === 0 ? 'active' : ''}" onclick="selectExercise('${name}')">${name}</div>`
+    ).join('');
+    
+    updateHeaderLabel();
+    resetInput();
   }
 
   function selectExercise(name) {
@@ -397,7 +470,6 @@
       records.push({ ex: fullExName, wt: currentWeight, rep: currentReps });
       renderLog();
 
-      // 片側(L)を記録した直後なら、自動で(R)に切り替えて重量を引き継ぐアシスト
       if (currentSide === ' (L)') {
         setSide(' (R)');
         currentWeight = records[records.length - 1].wt;
@@ -417,11 +489,8 @@
     box.innerHTML = records.map((r, i) => `[${i+1}] ${r.ex} : ${r.wt}kg × ${r.rep}rep`).reverse().join('<br>');
   }
 
-  // チャット連携用の一括コピー関数
   function copyForChat() {
     if (records.length === 0) return;
-    
-    // 種目ごとにセットを集約
     const summary = {};
     records.forEach(r => {
       if (!summary[r.ex]) summary[r.ex] = [];
@@ -431,7 +500,6 @@
     const now = new Date();
     const dateStr = `${now.getMonth() + 1}/${now.getDate()}`;
     let output = `【WORKOUT LOG: ${dateStr}】\n`;
-    
     for (const [ex, sets] of Object.entries(summary)) {
       output += `・${ex}: ${sets.join(', ')}\n`;
     }
@@ -441,9 +509,8 @@
     });
   }
 
-  // 初期実行
-  renderExerciseButtons();
-  updateHeaderLabel();
+  // 初期初期化
+  renderSubCats();
 </script>
 </body>
 </html>
