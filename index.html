@@ -435,4 +435,87 @@
   function pressNum(n) {
     const disp = document.getElementById('valDisplay');
     if (step === 1) {
-      if (n === '.'
+      if (n === '.' && currentWeight.includes('.')) return;
+      currentWeight += n;
+      disp.innerText = currentWeight;
+    } else {
+      if (n === '.') return;
+      currentReps += n;
+      disp.innerText = currentReps;
+    }
+  }
+
+  function clearVal() {
+    if (step === 1) currentWeight = '';
+    else currentReps = '';
+    document.getElementById('valDisplay').innerText = '--';
+  }
+
+  function resetInput() {
+    step = 1;
+    currentWeight = '';
+    currentReps = '';
+    document.getElementById('stepLabel').innerText = 'STEP 1: WEIGHT';
+    document.getElementById('unitDisplay').innerText = 'kg';
+    document.getElementById('valDisplay').innerText = '--';
+    document.getElementById('execBtn').innerText = 'NEXT: REPS →';
+  }
+
+  function confirmStep() {
+    if (step === 1) {
+      if (!currentWeight) return;
+      step = 2;
+      document.getElementById('stepLabel').innerText = 'STEP 2: REPS';
+      document.getElementById('unitDisplay').innerText = 'rep';
+      document.getElementById('valDisplay').innerText = '--';
+      document.getElementById('execBtn').innerText = 'EXECUTE [約定]';
+    } else {
+      if (!currentReps) return;
+      const fullExName = currentExercise + currentSide;
+      records.push({ ex: fullExName, wt: currentWeight, rep: currentReps });
+      renderLog();
+
+      if (currentSide === ' (L)') {
+        setSide(' (R)');
+        currentWeight = records[records.length - 1].wt;
+        step = 2;
+        document.getElementById('stepLabel').innerText = 'STEP 2: REPS';
+        document.getElementById('unitDisplay').innerText = 'rep';
+        document.getElementById('valDisplay').innerText = '--';
+        document.getElementById('execBtn').innerText = 'EXECUTE [約定]';
+      } else {
+        resetInput();
+      }
+    }
+  }
+
+  function renderLog() {
+    const box = document.getElementById('logBox');
+    box.innerHTML = records.map((r, i) => `[${i+1}] ${r.ex} : ${r.wt}kg × ${r.rep}rep`).reverse().join('<br>');
+  }
+
+  function copyForChat() {
+    if (records.length === 0) return;
+    const summary = {};
+    records.forEach(r => {
+      if (!summary[r.ex]) summary[r.ex] = [];
+      summary[r.ex].push(`${r.wt}kg × ${r.rep}`);
+    });
+
+    const now = new Date();
+    const dateStr = `${now.getMonth() + 1}/${now.getDate()}`;
+    let output = `【WORKOUT LOG: ${dateStr}】\n`;
+    for (const [ex, sets] of Object.entries(summary)) {
+      output += `・${ex}: ${sets.join(', ')}\n`;
+    }
+
+    navigator.clipboard.writeText(output.trim()).then(() => {
+      alert('CHAT LOG COPIED!\nチャットにそのまま貼り付けて送信できます。');
+    });
+  }
+
+  // 初期化実行
+  renderSubCats();
+</script>
+</body>
+</html>
