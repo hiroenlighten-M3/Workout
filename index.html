@@ -57,11 +57,11 @@
     box-shadow: 0 0 5px var(--green);
   }
 
-  /* 部位メインタブ（第1階層） */
+  /* 部位メインタブ（7分割対応） */
   .category-tabs {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 4px;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 3px;
   }
   .cat-btn {
     background: var(--panel);
@@ -69,7 +69,7 @@
     color: var(--muted);
     padding: 8px 0;
     border-radius: 5px;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 700;
     text-align: center;
     cursor: pointer;
@@ -80,7 +80,7 @@
     color: #60a5fa;
   }
 
-  /* 解剖学的サブカテゴリ・チップ（第2階層） */
+  /* 解剖学的サブカテゴリ・チップ */
   .subcat-bar {
     display: flex;
     gap: 5px;
@@ -91,7 +91,7 @@
     background: #10141a;
     border: 1px solid var(--border);
     color: #818cf8;
-    padding: 5px 10px;
+    padding: 5px 9px;
     border-radius: 12px;
     font-size: 11px;
     font-weight: 600;
@@ -105,7 +105,7 @@
     box-shadow: 0 0 6px rgba(99, 102, 241, 0.3);
   }
 
-  /* 種目リスト（第3階層：常に3〜5個で整理） */
+  /* 種目リスト */
   .exercise-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -257,11 +257,11 @@
 <body>
 
   <div class="header">
-    <div><span class="status-dot"></span>GRANFIT24 TERMINAL V3</div>
+    <div><span class="status-dot"></span>GRANFIT24 TERMINAL V4</div>
     <div id="clock">00:00</div>
   </div>
 
-  <!-- 第1階層：部位タブ -->
+  <!-- 第1階層：部位タブ（腹筋・体幹を追加） -->
   <div class="category-tabs">
     <div class="cat-btn active" onclick="switchMainCat('胸')">胸</div>
     <div class="cat-btn" onclick="switchMainCat('肩')">肩</div>
@@ -269,6 +269,7 @@
     <div class="cat-btn" onclick="switchMainCat('三頭')">三頭</div>
     <div class="cat-btn" onclick="switchMainCat('二頭')">二頭</div>
     <div class="cat-btn" onclick="switchMainCat('脚')">脚</div>
+    <div class="cat-btn" onclick="switchMainCat('体幹')">体幹</div>
   </div>
 
   <!-- 第2階層：解剖学的サブカテゴリ・チップ -->
@@ -319,33 +320,37 @@
   <div class="copy-btn" onclick="copyForChat()">COPY FOR CHAT</div>
 
 <script>
-  // 解剖学的マスターデータ
+  // Granfit24宝塚店 解剖学的マスターデータ（新マシン完全統合版）
   const DB = {
     '胸': {
-      '上部 (インクライン)': ['PL インクライン', 'インクラインスミス', 'インクラインDBプレス', 'インクラインDBフライ', 'ロープーリークロス'],
+      '上部 (インクライン)': ['HS スーパーインクライン', 'PL インクライン', 'インクラインスミス', 'インクラインDBプレス', 'ロープーリークロス'],
       '中部 (フラット)': ['PL ワイドチェスト', 'フラットDBプレス', 'フラットDBフライ', 'ペックフライ', 'スミスフラット'],
-      '下部 (デクライン)': ['PL デクライン', 'ディップス (胸)', 'ハイプーリークロス']
+      '下部 (デクライン)': ['HS デクラインプレス', 'PL デクライン', 'ディップス (胸)', 'ハイプーリークロス']
     },
     '肩': {
-      '前部 (フロント)': ['スミスミリタリー', 'ダンベルショルダー', 'スミスインクラインF', 'ケーブルフロントレイズ'],
+      '前部 (フロント)': ['HS ショルダープレス', 'スミスミリタリー', 'ダンベルショルダー', 'ケーブルフロントレイズ'],
       '中部 (サイド)': ['ダンベルサイドレイズ', 'インクラインサイドレイズ', 'ケーブルサイドレイズ'],
       '後部 (リア)': ['ケーブルリアデルト', 'ダンベルリアデルト', 'ペックリア', 'フェイスプル']
     },
     '背中': {
-      '上部/外側 (垂直引き)': ['PL ワイドプルダウン', 'ラットプルダウン', 'PL ハイロウ (DY)', 'アシストプルアップ'],
-      '中下部/内側 (水平引き)': ['ベントオーバーロウ', 'Tバーロウ', 'ローロウ', 'シーテッドケーブルロウ', 'ダンベルワンハンドロウ']
+      '上部/外側 (垂直・広がり)': ['PL ワイドプルダウン', 'HS DYロウ (ワイド)', 'PL ハイロウ (DY)', 'ラットプルダウン', 'アシストプルアップ'],
+      '中下部/内側 (水平・厚み)': ['HS アイソロウ', 'HS DYロウ (アンダー)', 'ベントオーバーロウ', 'Tバーロウ', 'シーテッドケーブルロウ', 'ダンベルワンハンドロウ']
     },
     '三頭': {
-      '長頭 (ストレッチ)': ['ライイングエクステ', 'EZバーエクステ', 'オーバーヘッドケーブル'],
-      '外側・内側 (プレス)': ['パラレルグリップPD', 'ローププレスダウン', 'ディップス (三頭)', 'キックバック']
+      'プレス・多関節': ['ナローベンチ', 'パラレルグリップPD', 'ローププレスダウン', 'ディップス (三頭)'],
+      'ストレッチ・単関節': ['ライイングエクステ', 'EZバーエクステ', 'オーバーヘッドケーブル', 'キックバック']
     },
     '二頭': {
-      '長頭・短頭': ['インクラインDBカール', 'EZバーカール', 'ケーブルカール', 'コンセントレーション'],
-      '上腕筋・腕橈骨筋': ['ハンマーカール', 'リバースカール']
+      'カール・収縮': ['HS シーテッドカール', 'インクラインDBカール', 'EZバーカール', 'ケーブルカール', 'コンセントレーション'],
+      '腕橈骨筋・上腕筋': ['ハンマーカール', 'リバースカール']
     },
     '脚': {
       '大腿四頭筋 (前)': ['PL レッグプレス', 'レッグエクステ', 'ハックスクワット', 'ブルガリアンSQ'],
-      'ハム・臀部 (後)': ['シーテッドレッグカール', 'ライイングレッグカール', 'ルーマニアンDL', 'カーフレイズ']
+      'ハム・臀部・カーフ': ['HS グルートハム', 'シーテッドレッグカール', 'ライイングレッグカール', 'HS スタンディングカーフ', 'ヒップアブダクション', 'ルーマニアンDL']
+    },
+    '体幹': {
+      '腹直筋 (クランチ)': ['HS オブリーククランチ', 'アブドミナル', 'ハンギングレッグレイズ'],
+      '腹斜筋 (回旋)': ['トーソローテーション', 'HS オブリーク(回旋)', 'ケーブルウッドチョップ']
     }
   };
 
@@ -430,87 +435,4 @@
   function pressNum(n) {
     const disp = document.getElementById('valDisplay');
     if (step === 1) {
-      if (n === '.' && currentWeight.includes('.')) return;
-      currentWeight += n;
-      disp.innerText = currentWeight;
-    } else {
-      if (n === '.') return;
-      currentReps += n;
-      disp.innerText = currentReps;
-    }
-  }
-
-  function clearVal() {
-    if (step === 1) currentWeight = '';
-    else currentReps = '';
-    document.getElementById('valDisplay').innerText = '--';
-  }
-
-  function resetInput() {
-    step = 1;
-    currentWeight = '';
-    currentReps = '';
-    document.getElementById('stepLabel').innerText = 'STEP 1: WEIGHT';
-    document.getElementById('unitDisplay').innerText = 'kg';
-    document.getElementById('valDisplay').innerText = '--';
-    document.getElementById('execBtn').innerText = 'NEXT: REPS →';
-  }
-
-  function confirmStep() {
-    if (step === 1) {
-      if (!currentWeight) return;
-      step = 2;
-      document.getElementById('stepLabel').innerText = 'STEP 2: REPS';
-      document.getElementById('unitDisplay').innerText = 'rep';
-      document.getElementById('valDisplay').innerText = '--';
-      document.getElementById('execBtn').innerText = 'EXECUTE [約定]';
-    } else {
-      if (!currentReps) return;
-      const fullExName = currentExercise + currentSide;
-      records.push({ ex: fullExName, wt: currentWeight, rep: currentReps });
-      renderLog();
-
-      if (currentSide === ' (L)') {
-        setSide(' (R)');
-        currentWeight = records[records.length - 1].wt;
-        step = 2;
-        document.getElementById('stepLabel').innerText = 'STEP 2: REPS';
-        document.getElementById('unitDisplay').innerText = 'rep';
-        document.getElementById('valDisplay').innerText = '--';
-        document.getElementById('execBtn').innerText = 'EXECUTE [約定]';
-      } else {
-        resetInput();
-      }
-    }
-  }
-
-  function renderLog() {
-    const box = document.getElementById('logBox');
-    box.innerHTML = records.map((r, i) => `[${i+1}] ${r.ex} : ${r.wt}kg × ${r.rep}rep`).reverse().join('<br>');
-  }
-
-  function copyForChat() {
-    if (records.length === 0) return;
-    const summary = {};
-    records.forEach(r => {
-      if (!summary[r.ex]) summary[r.ex] = [];
-      summary[r.ex].push(`${r.wt}kg × ${r.rep}`);
-    });
-
-    const now = new Date();
-    const dateStr = `${now.getMonth() + 1}/${now.getDate()}`;
-    let output = `【WORKOUT LOG: ${dateStr}】\n`;
-    for (const [ex, sets] of Object.entries(summary)) {
-      output += `・${ex}: ${sets.join(', ')}\n`;
-    }
-
-    navigator.clipboard.writeText(output.trim()).then(() => {
-      alert('CHAT LOG COPIED!\nチャットにそのまま貼り付けて送信できます。');
-    });
-  }
-
-  // 初期初期化
-  renderSubCats();
-</script>
-</body>
-</html>
+      if (n === '.'
